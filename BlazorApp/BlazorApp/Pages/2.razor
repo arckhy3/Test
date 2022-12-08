@@ -1,0 +1,72 @@
+﻿@page "/2"
+
+<PageTitle>Problem 2</PageTitle>
+
+<h1>Problem 2</h1>
+
+
+<input autocomplete="off" type="number" class="form-control "
+       placeholder="Input the number of families" @bind="numFamily">
+
+<input autocomplete="off" type="text" class="form-control "
+       placeholder="Input number of member in the families" @bind="SmemberFamily">
+
+<button class="btn btn-primary" @onclick="onOutput">Output</button>
+
+<p>@output</p>
+
+
+
+@code {
+    int numFamily = 0;
+    int memberFamily = 0;
+    string SmemberFamily = "";
+
+    string output = "";
+
+    void onOutput()
+    {
+        string[] member = SmemberFamily.Split(' ');
+        List<int> memberInt = new List<int>();
+        if (member.Count() != numFamily)
+        {
+            output = "Input must be equal with count of family";
+        }
+        else
+        {
+            output = "Minimum bus required is : ";
+            int start = 0;
+            foreach (var item in member)
+            {
+                var temp = int.Parse(item);
+                memberInt.Add(temp);
+                start++;
+            }
+            memberInt = memberInt.OrderBy(x => x).ToList();
+            int count = 0;
+            for (int i = 0; i < memberInt.Count(); i++)
+            {
+                var temp = 4 - memberInt[i];
+                if (memberInt.FindAll(x => x == temp).Count() > 0 && memberInt.FindLastIndex(x => x == temp) > i)
+                {
+                    if (temp == 2)
+                    {
+                        if (memberInt.FindAll(x => x == temp).Count() > 1)
+                        {
+                            memberInt.Remove(memberInt.Find(x => x == temp));
+                        }
+                    }
+                    else
+                    {
+                        memberInt.Remove(memberInt.Find(x => x == temp));
+                    }
+
+                }
+                count++;
+            }
+            output += count;
+
+            StateHasChanged();
+        }
+    }
+}

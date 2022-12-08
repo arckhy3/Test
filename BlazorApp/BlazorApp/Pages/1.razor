@@ -1,0 +1,60 @@
+﻿@page "/1"
+
+<PageTitle>Problem 1</PageTitle>
+
+<h1>Problem 1</h1>
+
+
+<input autocomplete="off" type="text" class="form-control "
+       placeholder="Words" @bind="InputWords">
+
+<button class="btn btn-primary" @onclick="onOutput">Output</button>
+
+<p>Vowel Characters : @vocal</p>
+<p>Consonant Characters : @consonent</p>
+
+
+
+@code {
+        string InputWords = "";
+        List<char> vocalList = new List<char>();
+        string vocal = "";
+        List<char> consList = new List<char>();
+        string consonent = "";
+
+
+        void onOutput()
+        {
+            vocal = "";
+            var varinputword = InputWords.Replace(" ",string.Empty);
+            foreach (var item in varinputword.ToLower())
+            {
+                if (item == 'a' || item == 'i' || item == 'u' || item == 'e' || item == 'o')
+                {
+                    vocalList.Add(item);
+                }
+                else
+                {
+                    consList.Add(item);
+                }
+            }
+            var varvocalList = vocalList.GroupBy(x => x).ToList();
+            var varconsList = consList.GroupBy(x => x).ToList();
+            foreach (var item in varvocalList)
+            {
+                foreach (var a in vocalList.FindAll(x => x == item.Key))
+                {
+                    vocal += a;
+                }
+            }
+            
+            foreach (var item in varconsList)
+            {
+                foreach (var a in consList.FindAll(x => x == item.Key))
+                {
+                    consonent += a;
+                }
+            }
+            StateHasChanged();
+        }
+}
